@@ -1,7 +1,9 @@
 import { Sequelize } from "sequelize-typescript";
 import { Product } from "../../domain/entity/product";
+import { ProductService } from "../../domain/service/product.service";
 import ProductModel from "./db/sequelize/model/product.model";
 import ProductRepository from "./product.repository";
+
 describe("Product repository unit test", () => {
   let sequelize: Sequelize;
 
@@ -62,7 +64,7 @@ describe("Product repository unit test", () => {
     });
   });
 
-  it("should find a product", async () => {
+  it("should find a product by id", async () => {
     const productRepository = new ProductRepository();
     const product = new Product(1, "Product 1", 10);
 
@@ -76,10 +78,23 @@ describe("Product repository unit test", () => {
     });
 
     const foundProduct = await productRepository.findById(1);
-    expect(foundProduct).toStrictEqual({
+    expect(productModel.toJSON()).toStrictEqual({
       id: product.id,
       name: product.name,
       price: product.price,
     });
+  });
+
+  it("should findAll products", async () => {
+    const productRepository = new ProductRepository();
+
+    const product1 = new Product(1, "Product 1", 10);
+    productRepository.create(product1);
+
+    const product2 = new Product(2, "Product 2", 100);
+    productRepository.create(product2);
+
+    const products = await productRepository.findAll();
+    expect(products).toEqual([product1, product2]);
   });
 });
