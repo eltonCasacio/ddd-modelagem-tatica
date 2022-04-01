@@ -28,11 +28,48 @@ describe("Customer repository unit test", () => {
     const customer = new Customer("1", "Customer 1");
     const address = new Address("Street 1", 1, "12345678", "City 1");
     customer.addAddress(address);
-    
+
     customerRepository.create(customer);
 
     const foundCustomer = await customerRepository.findById(1);
 
     expect(foundCustomer).toEqual(customer);
   });
+
+  it("should update customer", async () => {
+    const customerRepository = new CustomerRepository();
+
+    const customer = new Customer("1", "Customer 1");
+    const address = new Address("Street 1", 1, "12345678", "City 1");
+    customer.addAddress(address);
+    await customerRepository.create(customer);
+
+    const foundCustomer = await customerRepository.findById(1);
+
+    expect(foundCustomer).toEqual(customer);
+
+    foundCustomer.changeName("Elton");
+    await customerRepository.update(foundCustomer);
+    const updatedCustomer = await customerRepository.findById(1);
+
+    expect(updatedCustomer.name).toEqual("Elton");
+  });
+
+  it("should finfAll customers", async () => {
+    const customerRepository = new CustomerRepository();
+
+    const customer1 = new Customer("1", "Customer 1");
+    const address1 = new Address("Street 1", 1, "12345678", "City 1");
+    customer1.addAddress(address1);
+    await customerRepository.create(customer1);
+
+    const customer2 = new Customer("2", "Customer 2");
+    const address2 = new Address("Street 2", 2, "87654321", "City 2");
+    customer2.addAddress(address2);
+    await customerRepository.create(customer2);
+
+    const foundCustomers = await customerRepository.findAll();
+
+    expect(foundCustomers).toEqual([customer1, customer2]);
+  })
 });

@@ -16,15 +16,43 @@ export default class CustomerRepository implements CustomerRepositoryInterface {
       rewardPoints: entity.rewardPoints,
     });
   }
-  update(entity: Customer): Promise<void> {
+
+  async update(entity: Customer): Promise<void> {
+    await CustomerModel.update(
+      {
+        name: entity.name,
+        street: entity.address.street,
+        number: entity.address.number,
+        cep: entity.address.cep,
+        city: entity.address.city,
+        active: entity.active,
+        rewardPoints: entity.rewardPoints,
+      },
+      { where: { id: entity.id } }
+    );
+  }
+
+  async delete(entity: Customer): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  delete(entity: Customer): Promise<void> {
-    throw new Error("Method not implemented.");
+
+  async findAll(): Promise<Customer[]> {
+    const foundCustomers = await CustomerModel.findAll();
+    return foundCustomers.map((foundCustomer) => {
+      const customer = new Customer(foundCustomer.id, foundCustomer.name);
+      const address = new Address(
+        foundCustomer.street,
+        foundCustomer.number,
+        foundCustomer.cep,
+        foundCustomer.city
+      );
+
+      customer.addAddress(address);
+
+      return customer;
+    });
   }
-  findAll(): Promise<Customer[]> {
-    throw new Error("Method not implemented.");
-  }
+
   async findById(id: number): Promise<Customer> {
     const foundCustomer = await CustomerModel.findOne({ where: { id } });
     const customer = new Customer(foundCustomer.id, foundCustomer.name);
