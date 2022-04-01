@@ -49,6 +49,7 @@ describe("Customer repository unit test", () => {
     expect(foundCustomer).toEqual(customer);
 
     foundCustomer.changeName("Elton");
+    foundCustomer.addRewardPoints(10);
     await customerRepository.update(foundCustomer);
     const updatedCustomer = await customerRepository.findById(1);
 
@@ -61,6 +62,7 @@ describe("Customer repository unit test", () => {
     const customer1 = new Customer("1", "Customer 1");
     const address1 = new Address("Street 1", 1, "12345678", "City 1");
     customer1.addAddress(address1);
+    customer1.addRewardPoints(34);
     await customerRepository.create(customer1);
 
     const customer2 = new Customer("2", "Customer 2");
@@ -70,6 +72,15 @@ describe("Customer repository unit test", () => {
 
     const foundCustomers = await customerRepository.findAll();
 
+    expect(foundCustomers).toHaveLength(2);
     expect(foundCustomers).toEqual([customer1, customer2]);
-  })
+  });
+
+  it("should throw error when customer not found", async () => {
+    const customerRepository = new CustomerRepository();
+
+    expect(async () => {
+      await customerRepository.findById(2316516846516853);
+    }).rejects.toThrow("Customer not found");
+  });
 });
