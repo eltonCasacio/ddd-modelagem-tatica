@@ -1,6 +1,6 @@
-import { Address } from "./address";
+import Address from "./address";
 
-export class Customer {
+export default class Customer {
   private _id: string;
   private _name: string;
   private _address?: Address;
@@ -13,12 +13,20 @@ export class Customer {
     this.validate();
   }
 
+  get id(): string {
+    return this._id;
+  }
+
   get name(): string {
     return this._name;
   }
 
-  get id(): string {
-    return this._id;
+  get address(): Address {
+    return this._address;
+  }
+
+  get active(): boolean {
+    return this._active;
   }
 
   get rewardPoints(): number {

@@ -1,5 +1,5 @@
-import { Customer } from "./customer";
-import { Address } from "./address";
+import Customer from "./customer";
+import Address from "./address";
 
 describe("Customer", () => {
   it("Should throw error when id is empty", () => {

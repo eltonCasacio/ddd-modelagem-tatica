@@ -1,8 +1,5 @@
-import { Customer } from "../entity/customer";
-import Order from "../entity/order";
-import OrderItem from "../entity/order_item";
-import { Product } from "../entity/product";
-import { ProductService } from "./product.service";
+import Product from "../entity/product";
+import ProductService from "./product.service";
 
 describe("Product Service unit test", () => {
   it("should change prices of all products", () => {

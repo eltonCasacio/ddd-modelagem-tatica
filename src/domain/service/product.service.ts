@@ -1,7 +1,9 @@
-import { Product } from "../entity/product";
+import Product from "../entity/product";
 
-export class ProductService {
+export default class ProductService {
   static increasePriceInPercent(products: Product[], percentege: number) {
-    products.forEach((product) => product.changePrice(product.price * (percentege / 100) + product.price));
+    products.forEach((product) =>
+      product.changePrice(product.price * (percentege / 100) + product.price)
+    );
   }
 }
