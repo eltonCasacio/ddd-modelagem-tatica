@@ -29,7 +29,7 @@ describe("Product repository unit test", () => {
 
     const productModel = await ProductModel.findOne({ where: { id: 1 } });
     expect(productModel.toJSON()).toStrictEqual({
-      id: 1,
+      id: "1",
       name: "Product 1",
       price: 10,
     });
@@ -43,7 +43,7 @@ describe("Product repository unit test", () => {
 
     const productModel = await ProductModel.findOne({ where: { id: 1 } });
     expect(productModel.toJSON()).toStrictEqual({
-      id: 1,
+      id: "1",
       name: "Product 1",
       price: 10,
     });
@@ -57,7 +57,7 @@ describe("Product repository unit test", () => {
       where: { id: 1 },
     });
     expect(updatedProductModel.toJSON()).toStrictEqual({
-      id: 1,
+      id: "1",
       name: "Product 2",
       price: 20,
     });
@@ -71,7 +71,7 @@ describe("Product repository unit test", () => {
 
     const productModel = await ProductModel.findOne({ where: { id: 1 } });
     expect(productModel.toJSON()).toStrictEqual({
-      id: 1,
+      id: "1",
       name: "Product 1",
       price: 10,
     });
