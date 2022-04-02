@@ -1,9 +1,9 @@
 export default class Product {
-  private _id: number;
+  private _id: string;
   private _name: string;
   private _price: number;
 
-  constructor(id: number, name: string, price: number) {
+  constructor(id: string, name: string, price: number) {
     this._id = id;
     this._name = name;
     this._price = price;
@@ -16,7 +16,7 @@ export default class Product {
     if (this._price < 0) throw new Error("Price must be greater than zero!");
   }
 
-  get id(): number {
+  get id(): string {
     return this._id;
   }
 

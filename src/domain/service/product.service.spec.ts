@@ -3,8 +3,8 @@ import ProductService from "./product.service";
 
 describe("Product Service unit test", () => {
   it("should change prices of all products", () => {
-    const product1 = new Product(1, "product 1", 10);
-    const product2 = new Product(2, "product 2", 130);
+    const product1 = new Product("1", "product 1", 10);
+    const product2 = new Product("2", "product 2", 130);
     const products = [product1, product2];
 
     ProductService.increasePriceInPercent(products, 10);
@@ -12,7 +12,7 @@ describe("Product Service unit test", () => {
     expect(product1.price).toBe(11);
     expect(product2.price).toBe(143);
 
-    const product3 = new Product(2, "product 2", 130);
+    const product3 = new Product("2", "product 2", 130);
     products.push(product3);
 
     ProductService.increasePriceInPercent(products, 100);
