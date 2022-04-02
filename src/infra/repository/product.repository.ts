@@ -27,7 +27,7 @@ export default class ProductRepository implements ProductRepositoryInterface {
     throw new Error("Method not implemented.");
   }
 
-  async findById(id: number): Promise<Product> {
+  async findById(id: string): Promise<Product> {
     const productModel = await ProductModel.findOne({ where: { id: id } });
     return new Product(productModel.id, productModel.name, productModel.price);
   }

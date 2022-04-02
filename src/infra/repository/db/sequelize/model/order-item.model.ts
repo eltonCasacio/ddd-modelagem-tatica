@@ -11,6 +11,7 @@ import ProductModel from "./product.model";
 
 @Table({
   tableName: "order_items",
+  timestamps: false,
 })
 export default class OrderItemModel extends Model {
   @PrimaryKey

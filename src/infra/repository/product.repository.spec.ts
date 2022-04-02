@@ -76,7 +76,6 @@ describe("Product repository unit test", () => {
       price: 10,
     });
 
-    const foundProduct = await productRepository.findById(1);
     expect(productModel.toJSON()).toStrictEqual({
       id: product.id,
       name: product.name,

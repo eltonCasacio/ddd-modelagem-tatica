@@ -52,7 +52,7 @@ export default class CustomerRepository implements CustomerRepositoryInterface {
     });
   }
 
-  async findById(id: number): Promise<Customer> {
+  async findById(id: string): Promise<Customer> {
     let foundCustomer;
     try {
       foundCustomer = await CustomerModel.findOne({

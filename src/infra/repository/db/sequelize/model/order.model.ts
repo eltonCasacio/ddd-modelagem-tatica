@@ -12,6 +12,7 @@ import OrderItemModel from "./order-item.model";
 
 @Table({
   tableName: "orders",
+  timestamps: false,
 })
 export default class OrderModel extends Model {
   @PrimaryKey
@@ -20,7 +21,7 @@ export default class OrderModel extends Model {
 
   @ForeignKey(() => CustomerModel)
   @Column({ allowNull: false })
-  declare customer_Id: string;
+  declare customer_id: string;
 
   //Recuperar os dados do customer
   @BelongsTo(() => CustomerModel)

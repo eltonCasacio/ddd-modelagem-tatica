@@ -31,7 +31,7 @@ describe("Customer repository unit test", () => {
 
     customerRepository.create(customer);
 
-    const foundCustomer = await customerRepository.findById(1);
+    const foundCustomer = await customerRepository.findById("1");
 
     expect(foundCustomer).toEqual(customer);
   });
@@ -44,14 +44,14 @@ describe("Customer repository unit test", () => {
     customer.addAddress(address);
     await customerRepository.create(customer);
 
-    const foundCustomer = await customerRepository.findById(1);
+    const foundCustomer = await customerRepository.findById("1");
 
     expect(foundCustomer).toEqual(customer);
 
     foundCustomer.changeName("Elton");
     foundCustomer.addRewardPoints(10);
     await customerRepository.update(foundCustomer);
-    const updatedCustomer = await customerRepository.findById(1);
+    const updatedCustomer = await customerRepository.findById("1");
 
     expect(updatedCustomer.name).toEqual("Elton");
   });
@@ -80,7 +80,7 @@ describe("Customer repository unit test", () => {
     const customerRepository = new CustomerRepository();
 
     expect(async () => {
-      await customerRepository.findById(2316516846516853);
+      await customerRepository.findById("aws34gf");
     }).rejects.toThrow("Customer not found");
   });
 });
