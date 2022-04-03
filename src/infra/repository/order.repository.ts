@@ -6,8 +6,6 @@ import OrderModel from "./db/sequelize/model/order.model";
 
 export default class OrderRepository implements OrderRepositoryInterface {
   async create(entity: Order): Promise<void> {
-    console.debug("create order:::::::", entity.total());
-
     await OrderModel.create(
       {
         id: entity.id,
@@ -34,8 +32,26 @@ export default class OrderRepository implements OrderRepositoryInterface {
   delete(entity: Order): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  findAll(): Promise<Order[]> {
-    throw new Error("Method not implemented.");
+  async findAll(): Promise<Order[]> {
+    const ordersModel = await OrderModel.findAll({ include: ["items"] });
+
+    return ordersModel.map((orderModel) => {
+      const order = new Order(
+        orderModel.id,
+        orderModel.customer_id,
+        orderModel.items.map(
+          (item) =>
+            new OrderItem(
+              item.id,
+              item.name,
+              item.price,
+              item.product_id,
+              item.quantity
+            )
+        )
+      );
+      return order;
+    });
   }
 
   async findById(id: string): Promise<Order> {
@@ -58,6 +74,6 @@ export default class OrderRepository implements OrderRepositoryInterface {
           )
       )
     );
-    return order
+    return order;
   }
 }
