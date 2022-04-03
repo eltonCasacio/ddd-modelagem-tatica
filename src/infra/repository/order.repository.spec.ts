@@ -147,4 +147,34 @@ describe("Order Repository unit test", () => {
     const foundOrders = await orderRepository.findAll();
     expect(foundOrders).toStrictEqual([order]);
   });
+
+  it("should delete order", async () => {
+    const cutomerRepository = new CustomerRepository();
+    const customer = new Customer("1", "Elton");
+    const address = new Address("Rua", 1, "12345-678", "Cidade");
+    customer.addAddress(address);
+    await cutomerRepository.create(customer);
+
+    const productRepository = new ProductRepository();
+    const macbook = new Product("5", "macbook air m1", 7000);
+    await productRepository.create(macbook);
+
+    const macbookItem = new OrderItem(
+      "1",
+      macbook.name,
+      macbook.price,
+      macbook.id,
+      1
+    );
+
+    const order = new Order("1", customer.id, [macbookItem]);
+    const orderRepository = new OrderRepository();
+    await orderRepository.create(order);
+
+    const foundOrder = await orderRepository.findById(order.id);
+    expect(foundOrder).toStrictEqual(order);
+
+    await orderRepository.delete(order);
+    expect(await orderRepository.findById(order.id)).toBeUndefined();
+  });
 });

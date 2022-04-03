@@ -26,12 +26,14 @@ export default class OrderRepository implements OrderRepositoryInterface {
     );
   }
 
-  update(entity: Order): Promise<void> {
+  async update(entity: Order): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  delete(entity: Order): Promise<void> {
-    throw new Error("Method not implemented.");
+
+  async delete(entity: Order): Promise<void> {
+    await OrderModel.destroy({ where: { id: entity.id } });
   }
+
   async findAll(): Promise<Order[]> {
     const ordersModel = await OrderModel.findAll({ include: ["items"] });
 
@@ -55,10 +57,17 @@ export default class OrderRepository implements OrderRepositoryInterface {
   }
 
   async findById(id: string): Promise<Order> {
-    const orderModel = await OrderModel.findOne({
-      where: { id },
-      include: ["items"],
-    });
+    let orderModel: OrderModel;
+    try {
+      orderModel = await OrderModel.findOne({
+        where: { id },
+        include: ["items"],
+      });
+    } catch (error) {
+      throw new Error(`Order with id ${id} not found`);
+    }
+
+    if (!orderModel) return undefined;
 
     const order = new Order(
       orderModel.id,
