@@ -23,12 +23,7 @@ describe("Order Repository unit test", () => {
       sync: { force: true },
     });
 
-    sequelize.addModels([
-      CustomerModel,
-      OrderModel,
-      OrderItemModel,
-      ProductModel,
-    ]);
+    sequelize.addModels([CustomerModel, OrderModel, OrderItemModel, ProductModel]);
     await sequelize.sync({ force: true });
   });
 
@@ -47,13 +42,7 @@ describe("Order Repository unit test", () => {
     const product = new Product("5", "macbook air m1", 7000);
     await productRepository.create(product);
 
-    const orderItem = new OrderItem(
-      "1",
-      product.name,
-      product.price,
-      product.id,
-      1
-    );
+    const orderItem = new OrderItem("1", product.name, product.price, product.id, 1);
 
     const order = new Order("1", customer.id, [orderItem]);
 
@@ -95,13 +84,7 @@ describe("Order Repository unit test", () => {
     const product = new Product("5", "macbook air m1", 7000);
     await productRepository.create(product);
 
-    const orderItem = new OrderItem(
-      "1",
-      product.name,
-      product.price,
-      product.id,
-      3
-    );
+    const orderItem = new OrderItem("1", product.name, product.price, product.id, 3);
 
     const order = new Order("1", customer.id, [orderItem]);
     const orderRepository = new OrderRepository();
@@ -124,21 +107,9 @@ describe("Order Repository unit test", () => {
     const monitor = new Product("7", "monitor", 1000);
     await productRepository.create(monitor);
 
-    const macbookItem = new OrderItem(
-      "1",
-      macbook.name,
-      macbook.price,
-      macbook.id,
-      1
-    );
+    const macbookItem = new OrderItem("1", macbook.name, macbook.price, macbook.id, 1);
 
-    const monitorItem = new OrderItem(
-      "2",
-      monitor.name,
-      monitor.price,
-      monitor.id,
-      1
-    );
+    const monitorItem = new OrderItem("2", monitor.name, monitor.price, monitor.id, 1);
 
     const order = new Order("1", customer.id, [macbookItem, monitorItem]);
     const orderRepository = new OrderRepository();
@@ -159,13 +130,7 @@ describe("Order Repository unit test", () => {
     const macbook = new Product("5", "macbook air m1", 7000);
     await productRepository.create(macbook);
 
-    const macbookItem = new OrderItem(
-      "1",
-      macbook.name,
-      macbook.price,
-      macbook.id,
-      1
-    );
+    const macbookItem = new OrderItem("1", macbook.name, macbook.price, macbook.id, 1);
 
     const order = new Order("1", customer.id, [macbookItem]);
     const orderRepository = new OrderRepository();
@@ -176,5 +141,37 @@ describe("Order Repository unit test", () => {
 
     await orderRepository.delete(order);
     expect(await orderRepository.findById(order.id)).toBeUndefined();
+  });
+
+  it("should update order", async () => {
+    const cutomerRepository = new CustomerRepository();
+    const customer = new Customer("1", "Elton");
+    const address = new Address("Rua", 1, "12345-678", "Cidade");
+    customer.addAddress(address);
+    await cutomerRepository.create(customer);
+
+    const productRepository = new ProductRepository();
+    let macbook = new Product("5", "macbook air m1", 7000);
+    await productRepository.create(macbook);
+
+    let macbookItem = new OrderItem("1", macbook.name, macbook.price, macbook.id, 1);
+
+    const order = new Order("1", customer.id, [macbookItem]);
+    let orderRepository = new OrderRepository();
+    await orderRepository.create(order);
+
+    let foundOrder = await orderRepository.findById(order.id);
+    expect(foundOrder).toStrictEqual(order);
+    
+    macbook.changePrice(6500)
+    macbook.changeName("Macbook Air usado")
+    macbookItem = new OrderItem("1", macbook.name, macbook.price, macbook.id, 1);
+
+    const newOrder = new Order("1", customer.id, [macbookItem]);
+    await orderRepository.update(newOrder);
+
+    foundOrder = await orderRepository.findById(newOrder.id);
+    expect(foundOrder).toStrictEqual(newOrder);
+
   });
 });

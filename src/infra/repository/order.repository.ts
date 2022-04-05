@@ -27,7 +27,16 @@ export default class OrderRepository implements OrderRepositoryInterface {
   }
 
   async update(entity: Order): Promise<void> {
-    throw new Error("Method not implemented.");
+    await OrderItemModel.update({
+      name: entity.items[0].name,
+      price: entity.items[0].price,
+      product_id: entity.items[0].productId,
+      quantity: entity.items[0].quantity,
+    },{
+      where: {
+        id: entity.items[0].id,
+      }
+    });
   }
 
   async delete(entity: Order): Promise<void> {
@@ -43,13 +52,7 @@ export default class OrderRepository implements OrderRepositoryInterface {
         orderModel.customer_id,
         orderModel.items.map(
           (item) =>
-            new OrderItem(
-              item.id,
-              item.name,
-              item.price,
-              item.product_id,
-              item.quantity
-            )
+            new OrderItem(item.id, item.name, item.price, item.product_id, item.quantity)
         )
       );
       return order;
@@ -69,20 +72,13 @@ export default class OrderRepository implements OrderRepositoryInterface {
 
     if (!orderModel) return undefined;
 
-    const order = new Order(
+    return new Order(
       orderModel.id,
       orderModel.customer_id,
       orderModel.items.map(
         (item) =>
-          new OrderItem(
-            item.id,
-            item.name,
-            item.price,
-            item.product_id,
-            item.quantity
-          )
+          new OrderItem(item.id, item.name, item.price, item.product_id, item.quantity)
       )
     );
-    return order;
   }
 }
